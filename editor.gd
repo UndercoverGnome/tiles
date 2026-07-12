@@ -6,6 +6,9 @@ extends Node2D
 var world: World = load('res://flatlandworld.tres') #eventually add choosable
 
 const cameraspeed: float = 350
+var chunkstoload: Array[Vector2i] = []
+
+
 
 func initialisechunk():
 	var tilesarray = []
@@ -26,15 +29,24 @@ func initialiseworldchunks():
 			id+=1
 			world.chunks[x].append(Chunk.new(id, Vector2i(x,y),'unnamed',initialisechunk()))
 
-func _ready() -> void:
-	editorUI.updateUI(world.title)
+func updatechunks():
+	var chunktoadd =Vector2i(floor(camera.position.x/(world.chunksize*32)),floor(camera.position.y/(world.chunksize*32)))
 
+	if (chunktoadd.x >= 0 and chunktoadd.x < world.size.x and chunktoadd.y >= 0 and chunktoadd.y < world.size.y):
+		if !chunkstoload.has(chunktoadd):
+			chunkstoload.append(chunktoadd)
+
+	print(chunkstoload)
+
+func _ready() -> void:
+	editorUI.updateUI(world, camera.position)
 	initialiseworldchunks()
 
-
 func _process(delta: float) -> void:
-	camera.position += Vector2(Input.get_axis('ui_left','ui_right')*cameraspeed*delta,Input.get_axis('ui_up','ui_down')*cameraspeed*delta)
-	editorUI.world = world
-	editorUI.camera_position = camera.position
-	editorUI.queue_redraw()
+	var movement = Vector2(Input.get_axis('ui_left','ui_right')*cameraspeed*delta,Input.get_axis('ui_up','ui_down')*cameraspeed*delta)
+	if movement.length()>0:
+		camera.position += movement
+		updatechunks()
+		editorUI.updateUI(world, camera.position)
+
 	DisplayServer.window_set_title('tile engine, editor | fps:'+str(Engine.get_frames_per_second()))
