@@ -6,7 +6,7 @@
 [resource]
 script = ExtResource("1_tr4qd")
 title = "Flatland"
-size = Vector2i(16, 16)
+size = Vector2i(4, 4)
 chunksize = 16
 chunks = []
 actors = []

@@ -1,11 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://cbw8wpb271dhx"]
+[gd_scene load_steps=4 format=3 uid="uid://cbw8wpb271dhx"]
 
 [ext_resource type="Script" path="res://editor.gd" id="1_phq7u"]
 [ext_resource type="Script" path="res://editorUI.gd" id="2_ep21a"]
+[ext_resource type="Texture2D" uid="uid://b63qr3unuqrr3" path="res://assets/icon.svg" id="3_xhckf"]
 
-[node name="main" type="Node2D" node_paths=PackedStringArray("editorUI")]
+[node name="main" type="Node2D" node_paths=PackedStringArray("editorUI", "camera")]
 script = ExtResource("1_phq7u")
 editorUI = NodePath("canvasLayer/editorUI")
+camera = NodePath("Camera2D")
 
 [node name="canvasLayer" type="CanvasLayer" parent="."]
 
@@ -32,3 +34,24 @@ text = "worldtitlelabel
 "
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+position = Vector2(1152, 0)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_xhckf")
+
+[node name="Sprite2D3" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_xhckf")
+
+[node name="Sprite2D4" type="Sprite2D" parent="."]
+position = Vector2(1152, 648)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_xhckf")
+
+[node name="Sprite2D5" type="Sprite2D" parent="."]
+position = Vector2(-1.19209e-07, 648)
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("3_xhckf")
