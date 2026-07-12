@@ -35,8 +35,20 @@ text = "worldtitlelabel
 horizontal_alignment = 1
 metadata/_edit_use_anchors_ = true
 
+[node name="Button" type="Button" parent="canvasLayer/editorUI"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -93.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "Overwrite world"
+
 [node name="Camera2D" type="Camera2D" parent="."]
 
 [node name="Sprite2D" type="Sprite2D" parent="Camera2D"]
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_xhckf")
+
+[connection signal="pressed" from="canvasLayer/editorUI/Button" to="." method="_on_save_button_pressed"]

@@ -10,7 +10,7 @@ var visualiser_tile_size := 16
 func updateUI(world: World, cameraposition):
 	self.world=world
 	worldtitlelabel=find_child('worldtitlelabel')
-	worldtitlelabel.text=world.title
+	worldtitlelabel.text=world.title+'\ncamerapos:'+str(cameraposition)
 	camera_position=cameraposition
 	queue_redraw()
 
@@ -18,7 +18,6 @@ func visualisechunks(camposition, world, visualisertilesize):
 	#DRAW CHUNKS IN GREEN IF THEY HAVE TILE DATA
 	for x in range(world.chunks.size()):
 		for y in range(world.chunks[x].size()):
-			print(world.chunks[x][y])
 			if world.chunks[x][y].walltiles != []:
 				draw_rect(Rect2(Vector2(world.chunks[x][y].coordinates.x*visualisertilesize,world.chunks[x][y].coordinates.y*visualisertilesize),Vector2(visualisertilesize-1,visualisertilesize-1)),Color.GREEN)
 	#DRAW CAMERA VISUALISER

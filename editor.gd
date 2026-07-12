@@ -3,15 +3,13 @@ extends Node2D
 @export var editorUI: Control
 @export var camera: Camera2D
 
-var world: World = load('res://flatlandworld.tres') #eventually add choosable
+var world: World = load('res://flatlandmain.tres') #eventually add choosable
 
-const cameraspeed: float = 350
+const cameraspeed: float = 500
 
 var chunkstoload: Array[Vector2i] = []
 var loadedtilemaps: Dictionary = {}
 
-func save_world():
-	ResourceSaver.save(world, "res://flatlandworld.tres")
 
 func initialisechunk():
 	var tilesarray = []
@@ -25,12 +23,20 @@ func initialisechunk():
 	return tilesarray
 
 func initialiseworldchunks():
+	world.chunks.clear()
 	var id=-1
 	for x in range(world.size.x):
 		world.chunks.append([])
 		for y in range(world.size.y):
 			id+=1
-			world.chunks[x].append(Chunk.new(id, Vector2i(x,y),'unnamed',initialisechunk()))#WHY ARE CHUNKS EMPTY?????
+			var chunk = Chunk.new()
+
+			chunk.id = id
+			chunk.coordinates = Vector2i(x, y)
+			chunk.title = "unnamed"
+			chunk.walltiles = initialisechunk()
+
+			world.chunks[x].append(chunk)
 
 
 func updatechunks():
@@ -65,6 +71,9 @@ func updatechunks():
 		loadedtilemaps.erase(chunk)
 
 func drawchunk(tilemap: TileMap, chunk: Chunk):
+	if chunk == null or chunk.walltiles.is_empty():
+		return
+
 	for x in range(world.chunksize):
 		for y in range(world.chunksize):
 			var tile = chunk.walltiles[x][y]
@@ -73,6 +82,13 @@ func drawchunk(tilemap: TileMap, chunk: Chunk):
 				tilemap.erase_cell(0, Vector2i(x,y))
 			else:
 				tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
+
+func _on_save_button_pressed() -> void:
+	var result = ResourceSaver.save(world, "res://flatlandmain.tres")#WHY ARE CHUNKS EMPTY ON SERIALISE?
+	if result == OK:
+		print("World saved ")
+	else:
+		print("Save failed: ", result)
 
 func _ready() -> void:
 	editorUI.updateUI(world, camera.position)
@@ -86,9 +102,5 @@ func _process(delta: float) -> void:
 		camera.position += movement
 		updatechunks()
 		editorUI.updateUI(world, camera.position)
-
-	if Input.is_action_just_pressed('ui_accept'):
-		print('saved!')
-		save_world()
 
 	DisplayServer.window_set_title('tile engine, editor | fps:'+str(Engine.get_frames_per_second()))
