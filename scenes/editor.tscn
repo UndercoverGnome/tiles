@@ -37,21 +37,6 @@ metadata/_edit_use_anchors_ = true
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
-[node name="Sprite2D2" type="Sprite2D" parent="."]
-position = Vector2(1152, 0)
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("3_xhckf")
-
-[node name="Sprite2D3" type="Sprite2D" parent="."]
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("3_xhckf")
-
-[node name="Sprite2D4" type="Sprite2D" parent="."]
-position = Vector2(1152, 648)
-scale = Vector2(0.1, 0.1)
-texture = ExtResource("3_xhckf")
-
-[node name="Sprite2D5" type="Sprite2D" parent="."]
-position = Vector2(-1.19209e-07, 648)
+[node name="Sprite2D" type="Sprite2D" parent="Camera2D"]
 scale = Vector2(0.1, 0.1)
 texture = ExtResource("3_xhckf")

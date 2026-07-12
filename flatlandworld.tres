@@ -8,7 +8,23 @@ script = ExtResource("1_tr4qd")
 title = "Flatland"
 size = Vector2i(4, 4)
 chunksize = 16
-chunks = []
+chunks = [[Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+], [Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+], [Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+], [Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+, Object(RefCounted,"script":Resource("res://chunk.gd"))
+]]
 actors = []
 tileset = ExtResource("2_8omal")
 tiledict = {
