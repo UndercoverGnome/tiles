@@ -10,6 +10,18 @@ const cameraspeed: float = 500
 var chunkstoload: Array[Vector2i] = []
 var loadedtilemaps: Dictionary = {}
 
+const chunkloadingshape = [
+		Vector2i(0,0),
+		Vector2i(0,1),
+		Vector2i(0,-1),
+		Vector2i(1,0),
+		Vector2i(1,1),
+		Vector2i(1,-1),
+		Vector2i(-1,0),
+		Vector2i(-1,1),
+		Vector2i(-1,-1),
+	]
+
 func initialisechunk():
 	var tilesarray = []
 	for x in range(world.chunksize):
@@ -45,18 +57,6 @@ func updatechunks():
 		floor(camera.position.x / chunk_size_pixels),
 		floor(camera.position.y / chunk_size_pixels)
 	)
-
-	var chunkloadingshape = [
-		Vector2i(0,0),
-		Vector2i(0,1),
-		Vector2i(0,-1),
-		Vector2i(1,0),
-		Vector2i(1,1),
-		Vector2i(1,-1),
-		Vector2i(-1,0),
-		Vector2i(-1,1),
-		Vector2i(-1,-1),
-	]
 
 	var wanted_chunks: Array[Vector2i] = []
 
