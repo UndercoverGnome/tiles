@@ -1,0 +1,72 @@
+[gd_scene load_steps=2 format=3 uid="uid://wqod0p4ec36y"]
+
+[ext_resource type="Script" path="res://mainmenu.gd" id="1_2727i"]
+
+[node name="main" type="Node2D" node_paths=PackedStringArray("modeoption")]
+script = ExtResource("1_2727i")
+modeoption = NodePath("canvasLayer/Control/modebutton")
+
+[node name="canvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="canvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="worldselectbutton" type="Button" parent="canvasLayer/Control"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -51.0
+offset_top = -48.5
+offset_right = 51.0
+offset_bottom = -17.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "select world"
+
+[node name="modebutton" type="OptionButton" parent="canvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -46.0
+offset_top = -15.5
+offset_right = 46.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+item_count = 2
+selected = 0
+popup/item_0/text = "editor"
+popup/item_0/id = 0
+popup/item_1/text = "game"
+popup/item_1/id = 1
+
+[node name="startbutton" type="Button" parent="canvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.5
+offset_top = 18.0
+offset_right = 22.5
+offset_bottom = 49.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "start
+"
+
+[connection signal="pressed" from="canvasLayer/Control/worldselectbutton" to="." method="_on_worldselectbutton_pressed"]
+[connection signal="pressed" from="canvasLayer/Control/startbutton" to="." method="_on_startbutton_pressed"]
