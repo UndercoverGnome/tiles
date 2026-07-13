@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var editorUI: Control
+@export var gameUI: Control
 @export var camera: Camera2D
 
 var world: World = load('res://flatlandmain.tres') #eventually add choosable
@@ -9,10 +9,6 @@ const cameraspeed: float = 500
 
 var chunkstoload: Array[Vector2i] = []
 var loadedtilemaps: Dictionary = {}
-var selectedtile: String = "empty"
-
-
-var drawing: bool = false
 
 const chunkloadingshape = [
 		Vector2i(0,0),
@@ -25,33 +21,6 @@ const chunkloadingshape = [
 		Vector2i(-1,1),
 		Vector2i(-1,-1),
 	]
-
-func initialisechunk():
-	var tilesarray = []
-	for x in range(world.chunksize):
-		tilesarray.append([])
-		for y in range(world.chunksize):
-			if x==0 or x==world.chunksize-1 or y==0 or y==world.chunksize-1:
-				tilesarray[x].append('metalwall')
-			else:
-				tilesarray[x].append('empty')
-	return tilesarray
-
-func initialiseworldchunks():
-	world.chunks.clear()
-	var id=-1
-	for x in range(world.size.x):
-		world.chunks.append([])
-		for y in range(world.size.y):
-			id+=1
-			var chunk = Chunk.new()
-
-			chunk.id = id
-			chunk.coordinates = Vector2i(x, y)
-			chunk.title = "unnamed"
-			chunk.walltiles = initialisechunk()
-
-			world.chunks[x].append(chunk)
 
 
 func updatechunks():
@@ -116,50 +85,13 @@ func drawchunk(tilemap: TileMap, chunk: Chunk):
 			else:
 				tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
 
-func _unhandled_input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		drawing = event.pressed
-
-
-func _on_save_button_pressed() -> void:
-	var result = ResourceSaver.save(world, "res://flatlandmain.tres")
-	if result == OK:
-		print("World saved ")
-	else:
-		print("Save failed: ", result)
-
 func _ready() -> void:
-	editorUI.updateUI(world, camera.position)
-	if world.chunks.is_empty():
-		print("ERROR! WORLD.CHUNKS IS EMPTY. INITIALISE CHUNKS!!")
-		initialiseworldchunks()
 	updatechunks()
 
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed('0'):
-		print('empty')
-		selectedtile='empty'
-	if Input.is_action_just_pressed('1'):
-		print('metalwall')
-		selectedtile='metalwall'
-
-	if drawing:
-		for coords in loadedtilemaps:
-			var tilemap:TileMap = loadedtilemaps[coords]
-			var cell:Vector2i = tilemap.local_to_map(tilemap.get_local_mouse_position())
-
-			if !cell.x<0 and !cell.y<0 and !cell.x>=world.chunksize and !cell.y>=world.chunksize:
-
-				var worldchunk = world.chunks[coords.x][coords.y]
-
-				tilemap.set_cell(0,cell,0,world.tiledict[selectedtile])
-				worldchunk.walltiles[cell.x][cell.y]=selectedtile
-				updatechunks()#RIGHT NOW ONLY UPDATES CHUNKS THAT ARE NEW
-
 	var movement = Vector2(Input.get_axis('ui_left','ui_right')*cameraspeed*delta,Input.get_axis('ui_up','ui_down')*cameraspeed*delta)
 	if movement.length()>0:
 		camera.position += movement
 		updatechunks()
-		editorUI.updateUI(world, camera.position)
 
 	DisplayServer.window_set_title('tile engine, editor | fps:'+str(Engine.get_frames_per_second()))
