@@ -1,8 +1,8 @@
-[gd_resource type="Resource" script_class="World" load_steps=68 format=3]
+[gd_resource type="Resource" script_class="World" load_steps=68 format=3 uid="uid://brflvs3j5mh31"]
 
 [ext_resource type="Script" path="res://World.gd" id="1_jvxnv"]
 [ext_resource type="Script" path="res://chunk.gd" id="1_tyf3d"]
-[ext_resource type="TileSet" path="res://assets/tileset.tres" id="2_u7inp"]
+[ext_resource type="TileSet" uid="uid://w0inusl5ose7" path="res://assets/tileset.tres" id="2_u7inp"]
 
 [sub_resource type="Resource" id="Resource_khbmw"]
 script = ExtResource("1_tyf3d")
