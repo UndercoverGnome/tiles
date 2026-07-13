@@ -84,6 +84,48 @@ func drawchunk(tilemap: TileMap, chunk: Chunk):
 			else:
 				tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
 
+func _unhandled_input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		for coords in loadedtilemaps:
+			var tilemap:TileMap = loadedtilemaps[coords]
+			var cell:Vector2i = tilemap.local_to_map(tilemap.get_local_mouse_position())
+
+			if !cell.x<0 and !cell.y<0 and !cell.x>=world.chunksize and !cell.y>=world.chunksize:
+				var worldchunk = world.chunks[coords.x][coords.y]
+
+				#INTERACT
+				var tile = worldchunk.walltiles[cell.x][cell.y]
+				match tile:
+					"dooropenh1":
+						tilemap.set_cell(0, cell, 0, world.tiledict["doorclosedh1"])
+						worldchunk.walltiles[cell.x][cell.y] = "doorclosedh1"
+
+					"doorclosedh1":
+						tilemap.set_cell(0, cell, 0, world.tiledict["dooropenh1"])
+						worldchunk.walltiles[cell.x][cell.y] = "dooropenh1"
+					"dooropenh2":
+						tilemap.set_cell(0, cell, 0, world.tiledict["doorclosedh2"])
+						worldchunk.walltiles[cell.x][cell.y] = "doorclosedh2"
+
+					"doorclosedh2":
+						tilemap.set_cell(0, cell, 0, world.tiledict["dooropenh2"])
+						worldchunk.walltiles[cell.x][cell.y] = "dooropenh2"
+					"dooropenv1":
+						tilemap.set_cell(0, cell, 0, world.tiledict["doorclosedv1"])
+						worldchunk.walltiles[cell.x][cell.y] = "doorclosedv1"
+
+					"doorclosedv1":
+						tilemap.set_cell(0, cell, 0, world.tiledict["dooropenv1"])
+						worldchunk.walltiles[cell.x][cell.y] = "dooropenv1"
+					"dooropenv2":
+						tilemap.set_cell(0, cell, 0, world.tiledict["doorclosedv2"])
+						worldchunk.walltiles[cell.x][cell.y] = "doorclosedv2"
+
+					"doorclosedv2":
+						tilemap.set_cell(0, cell, 0, world.tiledict["dooropenv2"])
+						worldchunk.walltiles[cell.x][cell.y] = "dooropenv2"
+
+
 func _ready() -> void:
 	updatechunks()
 

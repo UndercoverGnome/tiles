@@ -142,6 +142,18 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed('1'):
 		print('metalwall')
 		selectedtile='metalwall'
+	if Input.is_action_just_pressed('2'):
+		print('doorclosedh1')
+		selectedtile='doorclosedh1'
+	if Input.is_action_just_pressed('3'):
+		print('doorclosedh2')
+		selectedtile='doorclosedh2'
+	if Input.is_action_just_pressed('4'):
+		print('doorclosedv1')
+		selectedtile='doorclosedv1'
+	if Input.is_action_just_pressed('5'):
+		print('doorclosedv2')
+		selectedtile='doorclosedv2'
 
 	if drawing:
 		for coords in loadedtilemaps:
