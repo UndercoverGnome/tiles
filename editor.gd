@@ -9,6 +9,10 @@ const cameraspeed: float = 500
 
 var chunkstoload: Array[Vector2i] = []
 var loadedtilemaps: Dictionary = {}
+var selectedtile: String = "empty"
+
+
+var drawing: bool = false
 
 const chunkloadingshape = [
 		Vector2i(0,0),
@@ -113,13 +117,9 @@ func drawchunk(tilemap: TileMap, chunk: Chunk):
 				tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
 
 func _unhandled_input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
-		print('okay!!')
-		for coords in loadedtilemaps:
-			var tilemap = loadedtilemaps[coords]
-			var cell = tilemap.local_to_map(tilemap.get_local_mouse_position())
-			if !cell.x<0 and !cell.y<0 and !cell.x>world.chunksize and !cell.y>world.chunksize:
-				print('click on '+str(cell)+' of tilemap:'+str(tilemap))
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		drawing = event.pressed
+
 
 func _on_save_button_pressed() -> void:
 	var result = ResourceSaver.save(world, "res://flatlandmain.tres")
@@ -131,10 +131,30 @@ func _on_save_button_pressed() -> void:
 func _ready() -> void:
 	editorUI.updateUI(world, camera.position)
 	if world.chunks.is_empty():
-		print("ERROR! WORLD.CHUNKS IS EMPTY. INITIALISING CHUNKS")
+		print("ERROR! WORLD.CHUNKS IS EMPTY. INITIALISE CHUNKS!!")
 		initialiseworldchunks()
 
 func _process(delta: float) -> void:
+	if Input.is_action_just_pressed('0'):
+		print('empty')
+		selectedtile='empty'
+	if Input.is_action_just_pressed('1'):
+		print('metalwall')
+		selectedtile='metalwall'
+
+	if drawing:
+		for coords in loadedtilemaps:
+			var tilemap:TileMap = loadedtilemaps[coords]
+			var cell:Vector2i = tilemap.local_to_map(tilemap.get_local_mouse_position())
+
+			if !cell.x<0 and !cell.y<0 and !cell.x>=world.chunksize and !cell.y>=world.chunksize:
+
+				var worldchunk = world.chunks[coords.x][coords.y]
+
+				tilemap.set_cell(0,cell,0,world.tiledict[selectedtile])
+				worldchunk.walltiles[cell.x][cell.y]=selectedtile
+				updatechunks()#RIGHT NOW ONLY UPDATES CHUNKS THAT ARE NEW
+
 	var movement = Vector2(Input.get_axis('ui_left','ui_right')*cameraspeed*delta,Input.get_axis('ui_up','ui_down')*cameraspeed*delta)
 	if movement.length()>0:
 		camera.position += movement
