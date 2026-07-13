@@ -1,11 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://duds2bsemvvuy"]
+[gd_scene load_steps=5 format=3 uid="uid://duds2bsemvvuy"]
 
 [ext_resource type="Script" path="res://game.gd" id="1_mcbjd"]
+[ext_resource type="Script" path="res://CharacterBody2D.gd" id="2_e366r"]
+[ext_resource type="Texture2D" uid="uid://b63qr3unuqrr3" path="res://assets/icon.svg" id="3_13rqg"]
 
-[node name="main" type="Node2D" node_paths=PackedStringArray("gameUI", "camera")]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_powcy"]
+size = Vector2(30, 30)
+
+[node name="main" type="Node2D" node_paths=PackedStringArray("gameUI", "camera", "player")]
 script = ExtResource("1_mcbjd")
 gameUI = NodePath("canvasLayer/gameUI")
-camera = NodePath("Camera2D")
+camera = NodePath("CharacterBody2D/Camera2D")
+player = NodePath("CharacterBody2D")
 
 [node name="canvasLayer" type="CanvasLayer" parent="."]
 
@@ -19,4 +25,15 @@ grow_vertical = 2
 mouse_filter = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+position = Vector2(71, 70)
+script = ExtResource("2_e366r")
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("3_13rqg")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+shape = SubResource("RectangleShape2D_powcy")

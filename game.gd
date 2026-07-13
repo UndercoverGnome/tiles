@@ -2,10 +2,9 @@ extends Node2D
 
 @export var gameUI: Control
 @export var camera: Camera2D
+@export var player: CharacterBody2D
 
 var world: World = load('res://flatlandmain.tres') #eventually add choosable
-
-const cameraspeed: float = 500
 
 var chunkstoload: Array[Vector2i] = []
 var loadedtilemaps: Dictionary = {}
@@ -27,8 +26,8 @@ func updatechunks():
 	var chunk_size_pixels = world.chunksize * 32
 
 	var camera_chunk := Vector2i(
-		floor(camera.position.x / chunk_size_pixels),
-		floor(camera.position.y / chunk_size_pixels)
+		floor(camera.global_position.x / chunk_size_pixels),
+		floor(camera.global_position.y / chunk_size_pixels)
 	)
 
 	var wanted_chunks: Array[Vector2i] = []
@@ -89,9 +88,7 @@ func _ready() -> void:
 	updatechunks()
 
 func _process(delta: float) -> void:
-	var movement = Vector2(Input.get_axis('ui_left','ui_right')*cameraspeed*delta,Input.get_axis('ui_up','ui_down')*cameraspeed*delta)
-	if movement.length()>0:
-		camera.position += movement
+	if player.velocity.length()>0:
 		updatechunks()
 
-	DisplayServer.window_set_title('tile engine, editor | fps:'+str(Engine.get_frames_per_second()))
+	DisplayServer.window_set_title('tile engine, game | fps:'+str(Engine.get_frames_per_second()))
