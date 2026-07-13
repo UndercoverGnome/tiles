@@ -112,8 +112,17 @@ func drawchunk(tilemap: TileMap, chunk: Chunk):
 			else:
 				tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
 
+func _unhandled_input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		print('okay!!')
+		for coords in loadedtilemaps:
+			var tilemap = loadedtilemaps[coords]
+			var cell = tilemap.local_to_map(tilemap.get_local_mouse_position())
+			if !cell.x<0 and !cell.y<0 and !cell.x>world.chunksize and !cell.y>world.chunksize:
+				print('click on '+str(cell)+' of tilemap:'+str(tilemap))
+
 func _on_save_button_pressed() -> void:
-	var result = ResourceSaver.save(world, "res://flatlandmain.tres")#WHY ARE CHUNKS EMPTY ON SERIALISE?
+	var result = ResourceSaver.save(world, "res://flatlandmain.tres")
 	if result == OK:
 		print("World saved ")
 	else:
