@@ -7,10 +7,8 @@ var world: World = load('res://flatlandmain.tres') #eventually add choosable
 
 const cameraspeed: float = 500
 
-var chunkstoload: Array[Vector2i] = []
 var loadedtilemaps: Dictionary = {}
-var selectedtile: int = 0 #FUXED
-
+var selectedtile: int = 0
 
 var drawing: bool = false
 
@@ -26,23 +24,21 @@ const chunkloadingshape = [
 		Vector2i(-1,-1),
 	]
 
-func gettilefromxy(chunk, x, y):
+func gettilefromxy(chunk: Chunk, x: int, y: int) -> int:
 	return chunk.tiles[(y*world.chunksize)+x]
 
-func initialisechunktiles(): #FUXED
+func initialisechunktiles():
 	var tilesarray = []
 	for i in range(world.chunksize*world.chunksize):
 		tilesarray.append(randi_range(0,1))
 	return tilesarray
 
-
-func initialiseworldchunks(): #FUXED
+func initialiseworldchunks():
 	world.chunks.clear()
-	var id=-1
+	var id=0
 	for x in range(world.size.x):
 		world.chunks.append([])
 		for y in range(world.size.y):
-			id+=1
 			var chunk = Chunk.new()
 
 			chunk.id = id
@@ -51,14 +47,14 @@ func initialiseworldchunks(): #FUXED
 			chunk.tiles = initialisechunktiles()
 
 			world.chunks[x].append(chunk)
-
+			id+=1
 
 func updatechunks():
 	var chunk_size_pixels = world.chunksize * 32
 
 	var camera_chunk := Vector2i(
-		floor(camera.position.x / chunk_size_pixels),
-		floor(camera.position.y / chunk_size_pixels)
+		floor(camera.global_position.x / chunk_size_pixels),
+		floor(camera.global_position.y / chunk_size_pixels)
 	)
 
 	var wanted_chunks: Array[Vector2i] = []
@@ -111,33 +107,22 @@ func drawchunk(tilemap: TileMap, chunk: Chunk):
 			var tile = gettilefromxy(chunk, x, y)
 			tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
 
-func _unhandled_input(event):
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		drawing = event.pressed
+func cameramovement(delta):
+	var movement = Vector2(Input.get_axis('ui_left','ui_right')*cameraspeed*delta,Input.get_axis('ui_up','ui_down')*cameraspeed*delta)
+	if movement.length()>0:
+		camera.global_position += movement
+		updatechunks()
+		editorUI.updateUI(world, camera.global_position)
 
-
-func _on_save_button_pressed() -> void:
-	var result = ResourceSaver.save(world, "res://flatlandmain.tres")
-	if result == OK:
-		print("World saved ")
-	else:
-		print("Save failed: ", result)
-
-func _ready() -> void:
-	editorUI.updateUI(world, camera.position)
-	if world.chunks.is_empty():
-		print("ERROR! WORLD.CHUNKS IS EMPTY. INITIALISE CHUNKS!!")
-		initialiseworldchunks()
-	updatechunks()
-
-func _process(delta: float) -> void:
+func handleselectedtileinput():
 	if Input.is_action_just_pressed('0'): #IDEALLY GET RID OF THIS LATER
 		print('empty')
 		selectedtile=0
 	if Input.is_action_just_pressed('1'):
 		print('metalwall')
-		selectedtile=1#
+		selectedtile=1
 
+func handledrawing():
 	if drawing:
 		for coords in loadedtilemaps:
 			var tilemap:TileMap = loadedtilemaps[coords]
@@ -150,10 +135,30 @@ func _process(delta: float) -> void:
 				tilemap.set_cell(0,cell,0,world.tiledict[selectedtile])
 				worldchunk.tiles[(cell.y*world.chunksize)+cell.x]=selectedtile
 
-	var movement = Vector2(Input.get_axis('ui_left','ui_right')*cameraspeed*delta,Input.get_axis('ui_up','ui_down')*cameraspeed*delta)
-	if movement.length()>0:
-		camera.position += movement
-		updatechunks()
-		editorUI.updateUI(world, camera.position)
+func _on_save_button_pressed() -> void:
+	var result = ResourceSaver.save(world, "res://flatlandmain.tres")
+	if result == OK:
+		print("World saved ")
+	else:
+		print("Save failed: ", result)
+
+func _unhandled_input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		drawing = event.pressed
+
+func _ready() -> void:
+	editorUI.updateUI(world, camera.global_position)
+	print(world.chunks)
+	print(world.size)
+	if world.chunks.is_empty():
+		print("ERROR! WORLD.CHUNKS IS EMPTY. INITIALISE CHUNKS!!")
+		initialiseworldchunks()
+	updatechunks()
+	print(world.chunks)
+
+func _process(delta: float) -> void:
+	handleselectedtileinput()
+	handledrawing()
+	cameramovement(delta)
 
 	DisplayServer.window_set_title('tile engine, editor | fps:'+str(Engine.get_frames_per_second()))
