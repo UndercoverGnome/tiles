@@ -1,14 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://wqod0p4ec36y"]
+[gd_scene format=3 uid="uid://wqod0p4ec36y"]
 
-[ext_resource type="Script" path="res://mainmenu.gd" id="1_2727i"]
+[ext_resource type="Script" uid="uid://b72i0ix5dd0al" path="res://mainmenu.gd" id="1_2727i"]
 
-[node name="main" type="Node2D" node_paths=PackedStringArray("modeoption")]
+[node name="main" type="Node2D" unique_id=676009006 node_paths=PackedStringArray("modeoption")]
 script = ExtResource("1_2727i")
 modeoption = NodePath("canvasLayer/Control/modebutton")
 
-[node name="canvasLayer" type="CanvasLayer" parent="."]
+[node name="canvasLayer" type="CanvasLayer" parent="." unique_id=933102997]
 
-[node name="Control" type="Control" parent="canvasLayer"]
+[node name="Control" type="Control" parent="canvasLayer" unique_id=181172347]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -16,7 +16,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="worldselectbutton" type="Button" parent="canvasLayer/Control"]
+[node name="worldselectbutton" type="Button" parent="canvasLayer/Control" unique_id=2142430956]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -32,7 +32,7 @@ grow_horizontal = 2
 grow_vertical = 2
 text = "select world"
 
-[node name="modebutton" type="OptionButton" parent="canvasLayer/Control"]
+[node name="modebutton" type="OptionButton" parent="canvasLayer/Control" unique_id=1134530577]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -45,14 +45,14 @@ offset_right = 46.0
 offset_bottom = 15.5
 grow_horizontal = 2
 grow_vertical = 2
+selected = 0
 item_count = 2
-selected = 1
 popup/item_0/text = "editor"
 popup/item_0/id = 0
 popup/item_1/text = "game"
 popup/item_1/id = 1
 
-[node name="startbutton" type="Button" parent="canvasLayer/Control"]
+[node name="startbutton" type="Button" parent="canvasLayer/Control" unique_id=121904151]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5

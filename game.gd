@@ -71,18 +71,17 @@ func updatechunks():
 		loadedtilemaps[chunk].queue_free()
 		loadedtilemaps.erase(chunk)
 
+func gettilefromxy(chunk, x, y):
+	return chunk.tiles[(y*world.chunksize)+x]
+
 func drawchunk(tilemap: TileMap, chunk: Chunk):
-	if chunk == null or chunk.walltiles.is_empty():
+	if chunk == null or chunk.tiles.is_empty():
 		return
 
 	for x in range(world.chunksize):
 		for y in range(world.chunksize):
-			var tile = chunk.walltiles[x][y]
-
-			if tile == "empty":
-				tilemap.erase_cell(0, Vector2i(x,y))
-			else:
-				tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
+			var tile = gettilefromxy(chunk, x, y)
+			tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -94,36 +93,6 @@ func _unhandled_input(event):
 				var worldchunk = world.chunks[coords.x][coords.y]
 
 				#INTERACT
-				var tile = worldchunk.walltiles[cell.x][cell.y]
-				match tile:
-					"dooropenh1":
-						tilemap.set_cell(0, cell, 0, world.tiledict["doorclosedh1"])
-						worldchunk.walltiles[cell.x][cell.y] = "doorclosedh1"
-
-					"doorclosedh1":
-						tilemap.set_cell(0, cell, 0, world.tiledict["dooropenh1"])
-						worldchunk.walltiles[cell.x][cell.y] = "dooropenh1"
-					"dooropenh2":
-						tilemap.set_cell(0, cell, 0, world.tiledict["doorclosedh2"])
-						worldchunk.walltiles[cell.x][cell.y] = "doorclosedh2"
-
-					"doorclosedh2":
-						tilemap.set_cell(0, cell, 0, world.tiledict["dooropenh2"])
-						worldchunk.walltiles[cell.x][cell.y] = "dooropenh2"
-					"dooropenv1":
-						tilemap.set_cell(0, cell, 0, world.tiledict["doorclosedv1"])
-						worldchunk.walltiles[cell.x][cell.y] = "doorclosedv1"
-
-					"doorclosedv1":
-						tilemap.set_cell(0, cell, 0, world.tiledict["dooropenv1"])
-						worldchunk.walltiles[cell.x][cell.y] = "dooropenv1"
-					"dooropenv2":
-						tilemap.set_cell(0, cell, 0, world.tiledict["doorclosedv2"])
-						worldchunk.walltiles[cell.x][cell.y] = "doorclosedv2"
-
-					"doorclosedv2":
-						tilemap.set_cell(0, cell, 0, world.tiledict["dooropenv2"])
-						worldchunk.walltiles[cell.x][cell.y] = "dooropenv2"
 
 
 func _ready() -> void:

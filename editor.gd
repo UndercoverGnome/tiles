@@ -9,7 +9,7 @@ const cameraspeed: float = 500
 
 var chunkstoload: Array[Vector2i] = []
 var loadedtilemaps: Dictionary = {}
-var selectedtile: String = "empty"
+var selectedtile: int = 0 #FUXED
 
 
 var drawing: bool = false
@@ -26,18 +26,17 @@ const chunkloadingshape = [
 		Vector2i(-1,-1),
 	]
 
-func initialisechunk():
+func gettilefromxy(chunk, x, y):
+	return chunk.tiles[(y*world.chunksize)+x]
+
+func initialisechunktiles(): #FUXED
 	var tilesarray = []
-	for x in range(world.chunksize):
-		tilesarray.append([])
-		for y in range(world.chunksize):
-			if x==0 or x==world.chunksize-1 or y==0 or y==world.chunksize-1:
-				tilesarray[x].append('metalwall')
-			else:
-				tilesarray[x].append('empty')
+	for i in range(world.chunksize*world.chunksize):
+		tilesarray.append(randi_range(0,1))
 	return tilesarray
 
-func initialiseworldchunks():
+
+func initialiseworldchunks(): #FUXED
 	world.chunks.clear()
 	var id=-1
 	for x in range(world.size.x):
@@ -49,7 +48,7 @@ func initialiseworldchunks():
 			chunk.id = id
 			chunk.coordinates = Vector2i(x, y)
 			chunk.title = "unnamed"
-			chunk.walltiles = initialisechunk()
+			chunk.tiles = initialisechunktiles()
 
 			world.chunks[x].append(chunk)
 
@@ -104,17 +103,13 @@ func updatechunks():
 		loadedtilemaps.erase(chunk)
 
 func drawchunk(tilemap: TileMap, chunk: Chunk):
-	if chunk == null or chunk.walltiles.is_empty():
+	if chunk == null or chunk.tiles.is_empty():
 		return
 
 	for x in range(world.chunksize):
 		for y in range(world.chunksize):
-			var tile = chunk.walltiles[x][y]
-
-			if tile == "empty":
-				tilemap.erase_cell(0, Vector2i(x,y))
-			else:
-				tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
+			var tile = gettilefromxy(chunk, x, y)
+			tilemap.set_cell(0,Vector2i(x,y),0,world.tiledict[tile])
 
 func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -136,24 +131,12 @@ func _ready() -> void:
 	updatechunks()
 
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed('0'):
+	if Input.is_action_just_pressed('0'): #IDEALLY GET RID OF THIS LATER
 		print('empty')
-		selectedtile='empty'
+		selectedtile=0
 	if Input.is_action_just_pressed('1'):
 		print('metalwall')
-		selectedtile='metalwall'
-	if Input.is_action_just_pressed('2'):
-		print('doorclosedh1')
-		selectedtile='doorclosedh1'
-	if Input.is_action_just_pressed('3'):
-		print('doorclosedh2')
-		selectedtile='doorclosedh2'
-	if Input.is_action_just_pressed('4'):
-		print('doorclosedv1')
-		selectedtile='doorclosedv1'
-	if Input.is_action_just_pressed('5'):
-		print('doorclosedv2')
-		selectedtile='doorclosedv2'
+		selectedtile=1#
 
 	if drawing:
 		for coords in loadedtilemaps:
@@ -165,8 +148,7 @@ func _process(delta: float) -> void:
 				var worldchunk = world.chunks[coords.x][coords.y]
 
 				tilemap.set_cell(0,cell,0,world.tiledict[selectedtile])
-				worldchunk.walltiles[cell.x][cell.y]=selectedtile
-				updatechunks()#RIGHT NOW ONLY UPDATES CHUNKS THAT ARE NEW
+				worldchunk.tiles[(cell.y*world.chunksize)+cell.x]=selectedtile
 
 	var movement = Vector2(Input.get_axis('ui_left','ui_right')*cameraspeed*delta,Input.get_axis('ui_up','ui_down')*cameraspeed*delta)
 	if movement.length()>0:

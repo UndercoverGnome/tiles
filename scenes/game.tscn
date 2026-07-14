@@ -1,21 +1,21 @@
-[gd_scene load_steps=5 format=3 uid="uid://duds2bsemvvuy"]
+[gd_scene format=3 uid="uid://duds2bsemvvuy"]
 
-[ext_resource type="Script" path="res://game.gd" id="1_mcbjd"]
-[ext_resource type="Script" path="res://CharacterBody2D.gd" id="2_e366r"]
+[ext_resource type="Script" uid="uid://bncg277dn1pk7" path="res://game.gd" id="1_mcbjd"]
+[ext_resource type="Script" uid="uid://bsd2f0kk0iw7g" path="res://CharacterBody2D.gd" id="2_e366r"]
 [ext_resource type="Texture2D" uid="uid://b63qr3unuqrr3" path="res://assets/icon.svg" id="3_13rqg"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_powcy"]
 size = Vector2(30, 30)
 
-[node name="main" type="Node2D" node_paths=PackedStringArray("gameUI", "camera", "player")]
+[node name="main" type="Node2D" unique_id=497926442 node_paths=PackedStringArray("gameUI", "camera", "player")]
 script = ExtResource("1_mcbjd")
 gameUI = NodePath("canvasLayer/gameUI")
 camera = NodePath("CharacterBody2D/Camera2D")
 player = NodePath("CharacterBody2D")
 
-[node name="canvasLayer" type="CanvasLayer" parent="."]
+[node name="canvasLayer" type="CanvasLayer" parent="." unique_id=1258442364]
 
-[node name="gameUI" type="Control" parent="canvasLayer"]
+[node name="gameUI" type="Control" parent="canvasLayer" unique_id=897414274]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -25,15 +25,15 @@ grow_vertical = 2
 mouse_filter = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=1433735148]
 position = Vector2(71, 70)
 script = ExtResource("2_e366r")
 
-[node name="Camera2D" type="Camera2D" parent="CharacterBody2D"]
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=1136373855]
 
-[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D"]
+[node name="Sprite2D" type="Sprite2D" parent="CharacterBody2D" unique_id=2135531173]
 scale = Vector2(0.25, 0.25)
 texture = ExtResource("3_13rqg")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=197138709]
 shape = SubResource("RectangleShape2D_powcy")
