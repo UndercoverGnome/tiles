@@ -18,7 +18,7 @@ func visualisechunks(camposition, world, visualisertilesize):
 	#DRAW CHUNKS IN GREEN IF THEY HAVE TILE DATA
 	for x in range(world.chunks.size()):
 		for y in range(world.chunks[x].size()):
-			if world.chunks[x][y].tiles != []:
+			if !world.chunks[x][y].tiles:
 				draw_rect(Rect2(Vector2(world.chunks[x][y].coordinates.x*visualisertilesize,world.chunks[x][y].coordinates.y*visualisertilesize),Vector2(visualisertilesize-1,visualisertilesize-1)),Color.GREEN)
 	#DRAW CAMERA VISUALISER
 	draw_circle(Vector2(camposition.x/(world.chunksize*2),camposition.y/(world.chunksize*2)),2,Color.BLUE)
